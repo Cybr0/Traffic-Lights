@@ -16,36 +16,46 @@ class ViewController: UIViewController {
     @IBOutlet weak var redLight: UIView!
     @IBOutlet weak var yellowLight: UIView!
     @IBOutlet weak var greenLight: UIView!
+    
     @IBOutlet weak var startButton: UIButton!
-    var currentLight = Light.red
+    
+    private var currentLight = Light.red
+    private let lightIsOn: CGFloat = 1
+    private let lightIsOff: CGFloat = 0.3
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        yellowLight.alpha = 0.5
-        greenLight.alpha = 0.5
+        
+        redLight.alpha = lightIsOff
+        yellowLight.alpha = lightIsOff
+        greenLight.alpha = lightIsOff
         startButton.layer.cornerRadius = 10
-        redLight.layer.cornerRadius = redLight.bounds.height/2
-        yellowLight.layer.cornerRadius = yellowLight.bounds.height/2
-        greenLight.layer.cornerRadius = greenLight.bounds.height/2
+        
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillLayoutSubviews() {
+        let radius = redLight.bounds.height/2
+        redLight.layer.cornerRadius = radius
+        yellowLight.layer.cornerRadius = radius
+        greenLight.layer.cornerRadius = radius
     }
 
     @IBAction func StartTrafficLights() {
-        if startButton.titleLabel?.text == "Start" {
-            startButton.setTitle("Next", for: .normal)
-        }
+        startButton.setTitle("Next", for: .normal)
+        
         switch currentLight {
         case .red:
-            redLight.alpha = 0.5
-            yellowLight.alpha = 1
+            redLight.alpha = lightIsOn
+            greenLight.alpha = lightIsOff
             currentLight = .yellow
         case .yellow:
-            yellowLight.alpha = 0.5
-            greenLight.alpha = 1
+            redLight.alpha = lightIsOff
+            yellowLight.alpha = lightIsOn
             currentLight = .green
         case .green:
-            redLight.alpha = 1
-            greenLight.alpha = 0.5
+            yellowLight.alpha = lightIsOff
+            greenLight.alpha = lightIsOn
             currentLight = .red
         }
     }
